@@ -5,3 +5,4 @@ export { default as OnChangePlugin } from './OnChangePlugin.svelte';
 export { default as ClearEditorPlugin } from './ClearEditorPlugin.svelte';
 export * from './MediaNode';
 export { default as MediaNodePlugin } from './MediaNodePlugin.svelte';
+export { default as Decorator } from './Decorator.svelte';

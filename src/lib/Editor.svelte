@@ -7,7 +7,7 @@
         //type EditorConfig,
         type EditorThemeClasses,
         type LexicalEditor,
-		type LexicalNode
+        type LexicalNode
     } from 'lexical';
 
     import { onMount } from 'svelte';
@@ -17,6 +17,7 @@
     import { setContext } from 'svelte';
 
     import { key } from './editor';
+    import { Decorator } from '$lib/index';
 
     export let theme: EditorThemeClasses = {
         placeholder: 'placeholder',
@@ -24,7 +25,7 @@
     };
 
     export let editor: LexicalEditor;
-    export let nodes//EditorConfig["nodes"]//Parameters<typeof createEditor>["nodes"];
+    export let nodes; //EditorConfig["nodes"]//Parameters<typeof createEditor>["nodes"];
 
     const editorConfig = {
         namespace: 'wips_editor',
@@ -57,7 +58,8 @@
 </script>
 
 <div placeholder="wips" bind:this={editorElement} contenteditable={true} />
-<slot/>
+<slot />
+<Decorator/>
 
 <style>
     div {

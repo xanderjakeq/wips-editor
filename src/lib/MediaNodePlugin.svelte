@@ -8,8 +8,10 @@
         //$getSelection as getSelection,
         //CLEAR_EDITOR_COMMAND,
         //COMMAND_PRIORITY_EDITOR,
-        type LexicalEditor
+        type LexicalEditor,
+        DecoratorNode
     } from 'lexical';
+    import { mergeRegister } from '@lexical/utils';
     import { getContext } from 'svelte';
     import { key } from './editor';
     import { $createMediaNode as createMediaNode } from './MediaNode';
@@ -19,16 +21,17 @@
     //export const clear = () => editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
     //export let onClear: () => void;
 
+
     editor.update(() => {
-        const root = getRoot();
-        const mediaNode = createMediaNode('testid');
+        //const root = getRoot();
+        //const mediaNode = createMediaNode('testid');
 
-        console.log(mediaNode);
-        console.log('in media node');
+        //console.log(mediaNode);
+        //console.log('in media node');
 
-        insertNodes([createMediaNode('testid')]);
+        //insertNodes([createMediaNode('testid')]);
 
-        root.append(mediaNode);
+        //root.append(mediaNode);
     });
     //editor.registerCommand(
     //    CLEAR_EDITOR_COMMAND,

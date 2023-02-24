@@ -1,4 +1,4 @@
-import type { SvelteComponent } from 'svelte';
+import type { ComponentProps, SvelteComponent } from 'svelte';
 import {
     DecoratorNode,
     type LexicalNode,
@@ -8,7 +8,12 @@ import {
 } from 'lexical';
 import MediaNodeComponent from './MediaNode.svelte';
 
-export class MediaNode extends DecoratorNode<SvelteComponent> {
+type DecoratorImageType = {
+  componentClass: typeof SvelteComponent;
+  props: ComponentProps<MediaNodeComponent>;
+};
+
+export class MediaNode extends DecoratorNode<DecoratorImageType> {
     __id: string;
 
     static getType(): string {
@@ -37,18 +42,11 @@ export class MediaNode extends DecoratorNode<SvelteComponent> {
         return false;
     }
 
-    //decorate(editor: LexicalEditor, config: EditorConfig): SvelteComponent {
-    //    return new MediaNodeComponent({
-    //        target: this.createDOM(config, editor)
-    //    });
-    //}
-
-    decorate(editor: LexicalEditor, config: EditorConfig): SvelteComponent {
-        let comp = new MediaNodeComponent({
-            target: this.createDOM(config, editor)
-        });
-
-        return comp;
+    decorate(editor: LexicalEditor, config: EditorConfig): DecoratorImageType {
+        return {
+            componentClass: MediaNodeComponent,
+            props: {}
+        };
     }
 }
 
