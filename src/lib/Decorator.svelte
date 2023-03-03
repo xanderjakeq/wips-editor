@@ -1,38 +1,12 @@
 <script lang="ts">
     // ref: https://github.com/umaranis/svelte-lexical/blob/master/packages/svelte-lexical/src/core/Decorator.svelte
-    import {
-        $getRoot as getRoot,
-        $insertNodes as insertNodes,
-        //$createParagraphNode as createParagraphNode,
-        //$getRoot as getRoot,
-        //$getSelection as getSelection,
-        //CLEAR_EDITOR_COMMAND,
-        //COMMAND_PRIORITY_EDITOR,
-        type LexicalEditor,
-        DecoratorNode
-    } from 'lexical';
+    import { type LexicalEditor, DecoratorNode } from 'lexical';
     import { mergeRegister } from '@lexical/utils';
     import { getContext, getAllContexts, onMount, SvelteComponent } from 'svelte';
     import { key } from './editor';
-    import { $createMediaNode as createMediaNode } from './MediaNode';
 
     const editor: LexicalEditor = getContext(key);
     const contexts = getAllContexts();
-
-    //export const clear = () => editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
-    //export let onClear: () => void;
-
-    //editor.update(() => {
-    //    const root = getRoot();
-    //    const mediaNode = createMediaNode('testid');
-
-    //    console.log(mediaNode);
-    //    console.log('in media node');
-
-    //    insertNodes([createMediaNode('testid')]);
-
-    //    root.append(mediaNode);
-    //});
 
     // cache for svelte components
     const components: Record<string, SvelteComponent> = {};
@@ -88,24 +62,4 @@
             })
         );
     });
-    //editor.registerCommand(
-    //    CLEAR_EDITOR_COMMAND,
-    //    (_payload) => {
-    //        editor.update(() => {
-    //            const root = getRoot();
-    //            const selection = getSelection();
-    //            const paragraph = createParagraphNode();
-
-    //            root.clear();
-    //            root.append(paragraph);
-
-    //            if (selection != null) {
-    //                paragraph.select();
-    //            }
-    //            onClear();
-    //        });
-    //        return true;
-    //    },
-    //    COMMAND_PRIORITY_EDITOR
-    //);
 </script>

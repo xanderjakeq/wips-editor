@@ -4,7 +4,6 @@
         $createTextNode as createTextNode,
         $getRoot as getRoot,
         $getSelection as getSelection,
-        //type EditorConfig,
         type EditorThemeClasses,
         type LexicalEditor,
         type LexicalNode
@@ -64,5 +63,7 @@
 <style>
     div {
         background-color: yellow;
+        width: 100%;
+        max-width: 500px;
     }
 </style>
