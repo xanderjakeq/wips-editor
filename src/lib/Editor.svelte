@@ -26,15 +26,22 @@
     export let editor: LexicalEditor;
     export let nodes; //EditorConfig["nodes"]//Parameters<typeof createEditor>["nodes"];
 
+    const initialState =
+        '{"root":{"children":[{"type":"media_node","url":"","upload":true,"version":1},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"wips","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}'
+
+
+    //TODO: use initialState
     const editorConfig = {
         namespace: 'wips_editor',
         theme,
         onerror: console.error,
         editable: true,
-        nodes
+        nodes,
+        //editorState: JSON.parse(initialState)
     };
 
     editor = createEditor(editorConfig);
+    //editor.setEditorState(JSON.parse(initialState))
     let editorElement: HTMLElement;
 
     setContext(key, editor);

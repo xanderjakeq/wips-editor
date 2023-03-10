@@ -7,55 +7,42 @@ import {
     type NodeKey,
     type SerializedLexicalNode
 } from 'lexical';
-import MediaNodeComponent from './MediaNode.svelte';
-import MediaUploadComponent from './MediaUpload.svelte';
+import AutoLinkComponent from './AutoLinkNode.svelte';
 
-type DecoratorImageType = {
+type DecoratorType = {
     componentClass: typeof SvelteComponent;
-    props: ComponentProps<MediaNodeComponent | MediaUploadComponent>;
+    props: ComponentProps<AutoLinkComponent>;
 };
 
 type SerializedMediaNode = {
     type: string;
-    upload: boolean;
     url: string;
     version: number;
 };
 
-export class MediaNode extends DecoratorNode<DecoratorImageType> {
-    __upload: boolean;
+export class AutoLinkNode extends DecoratorNode<DecoratorType> {
     __url: string;
 
     static getType(): string {
-        return 'media_node';
+        return 'auto_link_node';
     }
 
-    static clone(node: MediaNode): MediaNode {
-        return new MediaNode({
+    static clone(node: AutoLinkNode): AutoLinkNode {
+        return new AutoLinkNode({
             key: node.__key,
-            upload: node.__upload,
             url: node.__url
         });
     }
 
-    constructor({
-        key,
-        upload = false,
-        url = ''
-    }: {
-        key?: NodeKey;
-        upload?: boolean;
-        url?: string;
-    }) {
+    constructor({ key, url }: { key?: NodeKey; url: string }) {
         super(key);
-        this.__upload = upload;
         this.__url = url;
     }
 
     createDOM(config: EditorConfig, _editor: LexicalEditor): HTMLElement {
         const element = document.createElement('div');
         console.log('dom created');
-        element.classList.add(config.theme.media || 'media_node');
+        element.classList.add(config.theme.media || this.getType());
         element.style.display = 'contents';
         return element;
     }
@@ -64,9 +51,9 @@ export class MediaNode extends DecoratorNode<DecoratorImageType> {
         return false;
     }
 
-    decorate(editor: LexicalEditor, config: EditorConfig): DecoratorImageType {
+    decorate(editor: LexicalEditor, config: EditorConfig): DecoratorType {
         return {
-            componentClass: this.__upload ? MediaUploadComponent : MediaNodeComponent,
+            componentClass: AutoLinkComponent,
             //NOTE: props that svelte components get with `export let props`
             props: {
                 url: this.__url,
@@ -75,8 +62,8 @@ export class MediaNode extends DecoratorNode<DecoratorImageType> {
         };
     }
 
-    static importJSON(node: SerializedMediaNode): MediaNode {
-        const mediaNode = $createMediaNode(node.url);
+    static importJSON(node: SerializedMediaNode): AutoLinkNode {
+        const mediaNode = $createAutoLinkNode(node.url);
         return mediaNode;
     }
 
@@ -85,20 +72,15 @@ export class MediaNode extends DecoratorNode<DecoratorImageType> {
             //...super.exportJSON(),
             type: this.getType(),
             url: this.__url,
-            upload: this.__upload,
             version: 1
         };
     }
 }
 
-export function $createMediaNode(url: string): MediaNode {
-    return new MediaNode({ url });
+export function $createAutoLinkNode(url: string): AutoLinkNode {
+    return new AutoLinkNode({ url });
 }
 
-export function $createMediaUploadNode(): MediaNode {
-    return new MediaNode({ upload: true });
-}
-
-export function $isMediaNode(node?: LexicalNode): boolean {
-    return node instanceof MediaNode;
+export function $isAutoLinkNode(node?: LexicalNode): boolean {
+    return node instanceof AutoLinkNode;
 }

@@ -1,9 +1,16 @@
 <script lang="ts">
     import type { LexicalEditor, EditorState, LexicalNode, EditorConfig } from '$lib/index';
 
-    import { Editor, OnChangePlugin, ClearEditorPlugin, MediaNode,
-        MediaNodePlugin } from '$lib/index';
-	import type { RegisteredNode } from 'lexical/LexicalEditor';
+    import {
+        Editor,
+        OnChangePlugin,
+        ClearEditorPlugin,
+        MediaNode,
+        MediaNodePlugin,
+        AutoLinkNode,
+        AutoLinkPlugin
+    } from '$lib/index';
+    import type { RegisteredNode } from 'lexical/LexicalEditor';
     import { onMount } from 'svelte';
     let editor: LexicalEditor;
 
@@ -16,16 +23,17 @@
     };
 
     const onClear = () => {
-        console.log("cleared")
-    }
+        console.log('cleared');
+    };
 
     const theme = {
-        placeholder: "test"
-    }
+        placeholder: 'test'
+    };
 
-    const nodes = [MediaNode];
+    const nodes = [MediaNode, AutoLinkNode];
 
     onMount(() => {});
+    //can this be "server rendered"
 </script>
 
 <div class="bg">
@@ -33,9 +41,17 @@
     <button on:click={clear}>clear</button>
     <Editor bind:editor {theme} {nodes}>
         <OnChangePlugin {onChange} />
-        <ClearEditorPlugin bind:clear={clear} {onClear} />
-        <MediaNodePlugin/>
+        <ClearEditorPlugin bind:clear {onClear} />
+        <MediaNodePlugin />
+        <AutoLinkPlugin />
     </Editor>
+    <button
+        on:click={() => {
+            console.log(JSON.stringify(editor.getEditorState()));
+        }}
+    >
+        log state
+    </button>
 </div>
 
 <style>

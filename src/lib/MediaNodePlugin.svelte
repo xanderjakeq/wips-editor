@@ -25,7 +25,7 @@
         $nodesOfType as nodesOfType
     } from 'lexical';
     import { mergeRegister } from '@lexical/utils';
-    import { getContext } from 'svelte';
+    import { getContext, onDestroy } from 'svelte';
     import { key } from './editor';
     import {
         $createMediaNode as createMediaNode,
@@ -38,16 +38,19 @@
 
     const editor: LexicalEditor = getContext(key);
 
+    if (!editor.hasNodes([MediaNode])) {
+        throw new Error('MediaNodePlugin: Media node not registered to editor');
+    }
+
     editor.registerCommand(
         RENDER_MEDIA_NODES_COMMAND,
         (payload: RENDER_MEDIA_NODES_COMMAND_Payload) => {
-            console.log('render media nodes payload', payload);
             editor.update(() => {
                 const root = getRoot();
                 const selection = getSelection();
 
                 const mediaNodes = payload.urls.map((url) => {
-                    return createMediaNode(url, url);
+                    return createMediaNode(url);
                 });
 
                 insertNodes(mediaNodes);
@@ -64,16 +67,16 @@
         COMMAND_PRIORITY_EDITOR
     );
 
+    //TODO: do i need this?
     const removeMutationListener = editor.registerMutationListener(MediaNode, (mutatedNodes) => {
         // mutatedNodes is a Map where each key is the NodeKey, and the value is the state of mutation.
         for (let [nodeKey, mutation] of mutatedNodes) {
-            console.log(nodeKey, mutation);
             const state = editor.getEditorState();
             state.read(() => {
-                const nodes = nodesOfType(MediaNode)
+                const nodes = nodesOfType(MediaNode);
                 // why other nodes get updated??? BRB
-                console.log(nodes)
-            })
+                console.log(nodes);
+            });
         }
     });
 
@@ -82,17 +85,13 @@
     //TODO: remove later
     editor.update(() => {
         const root = getRoot();
-        const mediaNode = createMediaUploadNode('upload_media');
+        const mediaNode = createMediaUploadNode();
         insertNodes([mediaNode]);
 
         root.append(mediaNode);
     });
-    onMount(() => {
-        if (!editor.hasNodes([MediaNode])) {
-            throw new Error('MediaNodePlugin: Media node not registered to editor');
-        }
-        () => {
-            removeMutationListener();
-        };
+
+    onDestroy(() => {
+        removeMutationListener();
     });
 </script>
